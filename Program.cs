@@ -1,5 +1,9 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.FileSystemGlobbing.Internal.Patterns;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 using TravisBrownBlog.Data;
 using TravisBrownBlog.Models;
 using TravisBrownBlog.Services;
@@ -20,12 +24,49 @@ builder.Services.AddIdentity<BlogUser, IdentityRole>(options => options.SignIn.R
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 // Custom Services
+builder.Services.AddScoped<IEmailSender, EmailService>();
 builder.Services.AddScoped<IImageService, ImageService>();
+builder.Services.AddScoped<IBlogPostService, BlogPostService>();
+
+builder.Services.Configure<MailSettings>(builder.Configuration.GetSection("MailSettings"));
+
+
+
+builder.Services.AddAuthentication().AddGoogle(googleOptions =>
+{
+    googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"] ?? Environment.GetEnvironmentVariable("ClientId")!;
+    googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"] ?? Environment.GetEnvironmentVariable("ClientSecret")!;
+});
+
 
 
 
 
 builder.Services.AddMvc();
+
+// Add Swashbuckle aka Swagger
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "TravisBrownBlog API",
+        Version = "v1",
+        Description = "Serve up Blog Data using .Net 6 Apis",
+        Contact = new OpenApiContact
+        {
+            Name = "T.Brown",
+            Email = "travistbrownsc@gmail.com",
+
+        }
+    });
+
+    var xmlFileName = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFileName));
+});
+    
+   
+
+
 
 var app = builder.Build();
 
@@ -45,6 +86,16 @@ else
     app.UseHsts();
 }
 
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "PublicAPI v1");
+    c.InjectStylesheet("/css/swagger.css");
+    c.InjectJavascript("/js/swagger.js");
+
+    c.DocumentTitle = "TravisBrownBlog API";
+});
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -54,8 +105,14 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
+    name: "custom",
+    pattern: "Content/{slug}",
+    defaults: new { controller = "BlogPosts", action = "Details" });
+
+app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
 app.MapRazorPages();
 
 app.Run();

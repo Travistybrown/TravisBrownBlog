@@ -11,6 +11,9 @@ namespace TravisBrownBlog.Models
         public int Id { get; set; }
 
         [Required]
+        public string? CreatorId { get; set; }
+
+        [Required]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} and max {1} character long.", MinimumLength = 2)]
         public string? Title { get; set; }
 
@@ -53,5 +56,7 @@ namespace TravisBrownBlog.Models
 
         
         public virtual ICollection<Tag> Tags { get; set; } = new HashSet<Tag>();
+
+        public virtual BlogUser? Creator { get; set; }
     }
 }

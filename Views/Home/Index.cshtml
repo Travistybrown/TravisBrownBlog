@@ -1,6 +1,10 @@
 ﻿@using TravisBrownBlog.Enums
 @using TravisBrownBlog.Services.Interfaces
-@model IEnumerable<TravisBrownBlog.Models.BlogPost>
+@model IPagedList<TravisBrownBlog.Models.BlogPost>
+
+@using X.PagedList
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
 @inject IImageService ImageService
 
 @{
@@ -21,7 +25,7 @@
                         </div>
                         <div class="media-body">
                             <div class="author-info">
-                                <h1 class="title"><a href="#">Travis Brown</a></h1>
+                                <h1 class="title"><a href="#">@Model.FirstOrDefault()?.Creator?.FullName</a></h1>
                                 <span class="b3 subtitle">Full-Stack Software Developer</span>
                             </div>
                             <div class="content">
@@ -53,13 +57,13 @@
             </div>
             <div class="col-lg-8 col-xl-8">
                 
-            @foreach(BlogPost post in Model)
+            @foreach(BlogPost blogPost in Model)
             { 
                 <!-- Start Post List  -->
                 <div class="content-block post-list-view mt--30">
                     <div class="post-thumbnail">
-                        <a asp-controller="BlogPosts" asp-action="Details" asp-route-id="@post.Id">
-                            <img src="@ImageService.ConvertByteArrayToFile(post.ImageData!, post.ImageType!, (int)DefaultImage.BlogPostImage)" alt="Post Images">
+                        <a asp-controller="BlogPosts" asp-action="Details" asp-route-slug="@blogPost.Id">
+                            <img src="@ImageService.ConvertByteArrayToFile(blogPost.ImageData!, blogPost.ImageType!, (int)DefaultImage.BlogPostImage)" alt="Post Images">
                         </a>
                     </div>
                     <div class="post-content">
@@ -67,14 +71,14 @@
                             <div class="post-cat-list">
                                 <a class="hover-flip-item-wrapper" >
                                     <span class="hover-flip-item">
-                                        <span data-text="@post.Category!.Name">@post.Category.Name</span>
+                                        <span data-text="@blogPost.Category!.Name">@blogPost.Category.Name</span>
                                     </span>
                                 </a>
                             </div>
                         </div>
                         <h4 class="title">
-                                <a asp-controller ="BlogPosts" asp-action="Details" asp-route-id="@post.Id">
-                               @post.Title
+                                <a asp-controller ="BlogPosts" asp-action="Details" asp-route-slug="@blogPost.Slug">
+                               @blogPost.Title
                             </a>
                         </h4>
                         <div class="post-meta-wrapper">
@@ -83,13 +87,13 @@
                                     <h6 class="post-author-name">
                                         <a class="hover-flip-item-wrapper" href="author.html">
                                             <span class="hover-flip-item">
-                                                <span data-text="Travis Brown">Travis Brown</span>
+                                                    <span data-text="@blogPost.Creator?.FirstName">@blogPost.Creator?.FullName</span>
                                             </span>
                                         </a>
                                     </h6>
                                     <ul class="post-meta-list">
-                                        <li>@post.DateCreated.ToString("MMM dd, YYYY")</li>
-                                        <li>@post.Comments.Count comments</li>
+                                        <li>@blogPost.DateCreated.ToString("MMM dd, yyyy")</li>
+                                        <li>@blogPost.Comments.Count comments</li>
                                     </ul>
                                 </div>
                             </div>
@@ -104,6 +108,15 @@
                 </div>
                 <!-- End Post List  -->
             }
+
+            <div>
+                <div>
+                    Page @(Model.PageCount < Model.PageNumber ? 1 : Model.PageNumber) of @Model.PageCount
+                </div>
+                <div>
+                    @Html.PagedListPager(Model, pageNum => Url.Action("Index", new {pageNum}))
+                </div>
+            </div>
 
             </div>
             <div class="col-lg-4 col-xl-4 mt_md--40 mt_sm--40">

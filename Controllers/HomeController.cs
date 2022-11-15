@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 using TravisBrownBlog.Data;
 using TravisBrownBlog.Models;
+using TravisBrownBlog.Services.Interfaces;
+using X.PagedList;
 
 namespace TravisBrownBlog.Controllers
 {
@@ -10,26 +12,45 @@ namespace TravisBrownBlog.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
+        private readonly IBlogPostService _blogPostService;
 
-        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context)
+        public HomeController(ILogger<HomeController> logger, ApplicationDbContext context, IBlogPostService blogPostService)
         {
             _logger = logger;
             _context = context;
+            _blogPostService = blogPostService;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int? pageNum)
         {
-            List<BlogPost> model = await _context.BlogPosts
-                                                 .Include(b => b.Comments)
-                                                 .Include(b => b.Category)
-                                                 .OrderByDescending(b => b.DateCreated)  
-                                                 .ToListAsync();
+            int pageSize = 5;
+            int page = pageNum ?? 1;
 
 
 
-            return View(model);
+            IPagedList<BlogPost> model = (await _blogPostService.GetAllBlogPostsAsync())
+                                    .Where(b => b.IsDeleted == false && b.IsPublished == true).ToPagedList(page,pageSize);
+
+
+           return View(model);
+
+
+
+           
         }
+        public async Task<IActionResult> SearchIndex(string searchString, int? pageNum)
+        {
+            int pageSize = 3;
+            int page = pageNum ?? 1;
 
+            ViewData["SearchString"] = searchString;
+
+            IPagedList<BlogPost> model = _blogPostService.SearchBlogPosts(searchString)
+                                          .ToPagedList(page, pageSize);
+
+            return View(nameof(Index), model);
+
+        }
         public IActionResult Privacy()
         {
             return View();

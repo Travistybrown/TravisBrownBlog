@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using TravisBrownBlog.Models;
 
 namespace TravisBrownBlog.Areas.Identity.Pages.Account
 {
@@ -84,6 +85,8 @@ namespace TravisBrownBlog.Areas.Identity.Pages.Account
             [Required]
             [EmailAddress]
             public string Email { get; set; }
+            public string LastName { get; internal set; }
+            public string FirstName { get; internal set; }
         }
         
         public IActionResult OnGet() => RedirectToPage("./Login");
@@ -197,11 +200,15 @@ namespace TravisBrownBlog.Areas.Identity.Pages.Account
             return Page();
         }
 
-        private IdentityUser CreateUser()
+        private BlogUser CreateUser()
         {
             try
             {
-                return Activator.CreateInstance<IdentityUser>();
+                BlogUser user = Activator.CreateInstance<BlogUser>();
+                user.FirstName = Input.FirstName;
+                user.LastName = Input.LastName;
+
+                return user;
             }
             catch
             {

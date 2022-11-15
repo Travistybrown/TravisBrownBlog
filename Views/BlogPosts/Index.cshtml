@@ -34,12 +34,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.Abstract)
             </th>
-            <th>
+           @* <th>
                 @Html.DisplayNameFor(model => model.IsDeleted)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.IsPublished)
-            </th>
+            </th>*@
             <th>
                 @Html.DisplayNameFor(model => model.ImageData)
             </th>
@@ -73,25 +73,29 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Abstract)
             </td>
-            <td>
+       @*     <td>
                 @Html.DisplayFor(modelItem => item.IsDeleted)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsPublished)
-            </td>
+            </td>*@
             <td>
-                    <img src="@ImageService.ConvertByteArrayToFile(item.ImageData!,item.ImageType!,(int)DefaultImage.BlogPostImage)" style="width:80%; height:80%" />
+                    <img class="img-fluid" src="@ImageService.ConvertByteArrayToFile(item.ImageData!,item.ImageType!,(int)DefaultImage.BlogPostImage)" style="width:80%; height:80%" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ImageType)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Category.Name)
+                @Html.DisplayFor(modelItem => item.Category!.Name)
             </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+            <td>  <a asp-action="Details" asp-route-slug="@item.Slug">Details</a> 
+                
+              @if(User.IsInRole("Administrator") || User.IsInRole("Moderator"))
+              { 
+
+                <span>|</span>   <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> <span>|</span>
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
             </td>
         </tr>
 }

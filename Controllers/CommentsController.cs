@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -63,19 +64,19 @@ namespace TravisBrownBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,BlogPostId,Body")] Comment comment)
+        public async Task<IActionResult> Create([Bind("Id,BlogPostId,Body")] Comment comment, string? slug)
         {
             if (ModelState.IsValid)
             {
                 comment.AuthorId = _userManager.GetUserId(User);
 
                 comment.DateCreated = DateTime.UtcNow;
-               
+
                 // Slug
 
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details","BlogPost", new {id = comment.BlogPostId});
+                return RedirectToAction("Details", "BlogPost", new { slug });
             }
             ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", comment.AuthorId);
             ViewData["BlogPostId"] = new SelectList(_context.BlogPosts, "Id", "Content", comment.BlogPostId);
@@ -95,9 +96,19 @@ namespace TravisBrownBlog.Controllers
             {
                 return NotFound();
             }
-            ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", comment.AuthorId);
-            ViewData["BlogPostId"] = new SelectList(_context.BlogPosts, "Id", "Content", comment.BlogPostId);
-            return View(comment);
+            if (User.IsInRole("Administrator") || User.IsInRole("Moderator") || comment.AuthorId == _userManager.GetUserId(User))
+            {
+               
+
+
+                ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", comment.AuthorId);
+                ViewData["BlogPostId"] = new SelectList(_context.BlogPosts, "Id", "Content", comment.BlogPostId);
+                return View(comment);
+            }
+            else
+            {
+                return Unauthorized();
+            }
         }
 
         // POST: Comments/Edit/5
@@ -105,11 +116,17 @@ namespace TravisBrownBlog.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles ="Administrator, Moderator")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,BlogPostId,AuthorId,DateCreated,LastUpdated,UpdateReason,Body")] Comment comment)
         {
             if (id != comment.Id)
             {
                 return NotFound();
+            }
+
+            if (!User.IsInRole("Administrator") && !User.IsInRole("Moderator") && comment.AuthorId != _userManager.GetUserId(User))
+            {
+                return Unauthorized();
             }
 
             if (ModelState.IsValid)
@@ -171,14 +188,14 @@ namespace TravisBrownBlog.Controllers
             {
                 _context.Comments.Remove(comment);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool CommentExists(int id)
         {
-          return _context.Comments.Any(e => e.Id == id);
+            return _context.Comments.Any(e => e.Id == id);
         }
     }
 }
