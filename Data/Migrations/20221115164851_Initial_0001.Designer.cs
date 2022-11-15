@@ -12,8 +12,8 @@ using TravisBrownBlog.Data;
 namespace TravisBrownBlog.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20221111163618_initial_0009")]
-    partial class initial_0009
+    [Migration("20221115164851_Initial_0001")]
+    partial class Initial_0001
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -190,6 +190,7 @@ namespace TravisBrownBlog.Data.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("CreatorId")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<DateTime>("DateCreated")
@@ -477,7 +478,9 @@ namespace TravisBrownBlog.Data.Migrations
 
                     b.HasOne("TravisBrownBlog.Models.BlogUser", "Creator")
                         .WithMany("BlogPosts")
-                        .HasForeignKey("CreatorId");
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Category");
 
