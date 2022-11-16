@@ -81,7 +81,7 @@ namespace TravisBrownBlog.Models
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Administrator,Moderator")]
-        public async Task<IActionResult> Create([Bind("Id,Title,Content,CategoryId,Abstract,IsDeleted,IsPublished,BlogPostImage")] BlogPost blogPost, IEnumerable<int> selectedTags)
+        public async Task<IActionResult> Create([Bind("Id,Title,Content,CategoryId,Abstract,IsDeleted,IsPublished,BlogPostImage")] BlogPost blogPost, string stringTags)
         {
             ModelState.Remove("creatorId");
 
@@ -113,7 +113,7 @@ namespace TravisBrownBlog.Models
                 await _context.SaveChangesAsync();
 
                 // Add Tags selected by the end user
-                await _blogPostService.AddTagsToBlogPostAsync(selectedTags, blogPost.Id);
+                await _blogPostService.AddTagsToBlogPostAsync(stringTags, blogPost.Id);
 
                 return RedirectToAction(nameof(Index));
             }

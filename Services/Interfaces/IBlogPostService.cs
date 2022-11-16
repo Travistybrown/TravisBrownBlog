@@ -7,8 +7,11 @@ namespace TravisBrownBlog.Services.Interfaces
         public Task AddTagsToBlogPostAsync(IEnumerable<int> tagIds, int blogPostId);
 
 
-
+        public  Task AddTagsToBlogPostAsync(string tagNames, int blogPostId);
+       
         public Task<List<BlogPost>> GetAllBlogPostsAsync();
+
+
 
         public Task<List<BlogPost>> GetPopularBlogPostsAsync();
 
@@ -23,7 +26,7 @@ namespace TravisBrownBlog.Services.Interfaces
 
         public IEnumerable<BlogPost> SearchBlogPosts(string searchString);
 
-       
+
 
         public Task<bool> ValidateSlugAsync(string title, int blogPostId);
 
