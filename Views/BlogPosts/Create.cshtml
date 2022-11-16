@@ -112,8 +112,9 @@
         });
 
         function addTag(el) {
+            // reset the tag cloud
             $('.tagcloud > a').show();
-
+            // get the name of the tag
             let tagName = el.textContent + ', ';
 
             let input = document.getElementById('tagInput');
@@ -129,6 +130,8 @@
                 input.value = currentTags.reduce((inputString, currentString) => inputString + ", " + currentString.trim());
 
                 input.focus();
+
+                
             }
         };
     </script>
