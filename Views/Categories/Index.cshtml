@@ -3,8 +3,42 @@
 @{
     ViewData["Title"] = "Index";
 }
+<div class="row">
+    <div class="col-12 text-end mb-2 mt-2">
+        <a class="btn btn-primary rounded-pill" asp-action="Create" asp-controller="Categories">Create New</a>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th colspan="2">
+                        My Categories
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (Category categories in Model)
+                {
 
-<h1>Index</h1>
+
+                    <tr>
+                        <td>
+                            @categories.Name
+                        </td>
+                        <td class="d-flex justify-content-end">
+                            <a asp-action="Edit" asp-route-id="@categories.Id">Edit</a> |
+                          
+                            <a asp-action="Delete" asp-route-id="@categories.Id">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+@*<h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -50,4 +84,4 @@
         </tr>
 }
     </tbody>
-</table>
+</table>*@
