@@ -47,10 +47,10 @@
                                                             </span>
                                                         </a>
                                                     </h6>
-                                                    <ul class="post-meta-list">
-                                                        <li>@Model.DateCreated.ToString("MM dd yyyy")</li>
+                                                 @*   <ul class="post-meta-list">
+                                                        <li>@Model.DateCreated.ToString("mm dd yyyy")</li>
                                                         <li>@Model.Comments.Count() Comments</li>
-                                                    </ul>
+                                                    </ul>*@
                                                 </div>
                                             </div>
 
@@ -68,10 +68,11 @@
                 <div class="axil-post-details">
 
                     <div>
-                        <h1>Abstract</h1>
+                        @*<h1>Abstract</h1>
                         <p class="has-medium-font-size">
                             @Model.Abstract
-                        </p>
+                        </p>*@
+                      
                         <p>
                             @Html.Raw(Model.Content)
                         </p>
@@ -86,7 +87,7 @@
 
 
                     <!-- Start Comment Form Area  -->
-                    <div class="axil-comment-area">
+                   @* <div class="axil-comment-area">
                         <div class="axil-total-comment-post">
                             <div class="title">
                                 <h4 class="mb--0">@Model.Comments.Count() Comments</h4>
@@ -95,7 +96,7 @@
                                 <a class="axil-button button-rounded" asp-area="Identity" asp-page="/Account/Login" asp-route-returnUrl="@Url.Action("Details", "BlogPosts",
                                 new{slug = Model.Slug})" tabindex="0"><span>Add Your Comment</span></a>
                             </div>
-                        </div>
+                        </div>*@
                         @if (User.Identity!.IsAuthenticated)
                         {
 
