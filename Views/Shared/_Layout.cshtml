@@ -42,7 +42,7 @@
                                 <!-- Start Mainmanu Nav -->
                                 <ul class="mainmenu">
                                    <li class="menu-item-has-children">
-                                       <a asp-controller="Home" asp-action="AuthorPage">Home</a>
+                                       <a asp-controller="Home" asp-action="Index">Home</a>
                                    </li>
                                    @foreach(var category in await blogService.GetCategoriesAsync())
                                    {
