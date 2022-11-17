@@ -7872,8 +7872,8 @@ Header Styles
   }
 }
 .axil-header.header-with-shadow {
-  -webkit-box-shadow: var(--shadow-primary);
-          box-shadow: var(--shadow-primary);
+  -webkit-box-shadow: var(--color-twitter);
+          box-shadow: var(--color-twitter);
 }
 @media only screen and (max-width: 575px) {
   .axil-header .logo {

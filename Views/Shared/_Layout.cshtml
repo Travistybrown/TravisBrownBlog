@@ -39,8 +39,78 @@
                 </li>
             </ul>
         </div>*@
+          <!-- Start Header -->
+        <header class="header axil-header  header-dark header-sticky header-with-shadow ">
+            <div class="header-wrap">
+                <div class="row justify-content-between align-items-center">
+                    <div class="col-xl-3 col-lg-3 col-md-4 col-sm-3 col-12">
+                        <div class="logo">
+                            <a href="index.html">
+                                <img class="dark-logo" src="~/img/t logo 200x200.png" alt=" logo">
+                            
+                            </a>
+                        </div>
+                    </div>
 
-        <!-- Start Header -->
+                    <div class="col-xl-6 d-none d-xl-block nav-dark">
+                        <div class="mainmenu-wrapper">
+                            <nav class="mainmenu-nav">
+                                <!-- Start Mainmanu Nav -->
+                                <ul class="mainmenu">
+                                    <li><a asp-action="Index" asp-controller="Home">Home</a></li>
+                                    <li><a asp-controller="BlogPosts" asp-action="Index">BlogPosts</a></li>
+                                    <li><a asp-controller="Categories" asp-action="Index">Categories</a></li>
+                                    <li><a asp-controller="Comments" asp-action="Index">Comments</a></li>
+                                    <li><a asp-controller="Tags" asp-action="Index">Tags</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-lg-8 col-md-8 col-sm-9 col-12">
+                        <div class="header-search text-end d-flex align-items-center">
+                            <form class="header-search-form d-sm-block d-none">
+                                <div class="axil-search form-group">
+                                    <button type="submit" class="search-button"><i class="fal fa-search"></i></button>
+                                    <input type="text" class="form-control" placeholder="Search">
+                                </div>
+                            </form>
+                            <div class="mobile-search-wrapper d-sm-none d-block">
+                                <button class="search-button-toggle"><i class="fal fa-search"></i></button>
+                                <form asp-controller="Home" asp-action="SearchIndex" class="header-search-form d-sm-block d-none">
+                                    <div class="axil-search form-group">
+                                        <button type="submit" class="search-button"><i class="fal fa-search"></i></button>
+                                        <input type="text" class="form-control" placeholder="Search" name="SearchString" id="SearchString">
+                                    </div>
+                                </form>
+                            </div>
+                           @* <ul class="metabar-block">
+                                <li class="icon"><a href="#"><i class="fas fa-bookmark"></i></a></li>
+                                <li class="icon"><a href="#"><i class="fas fa-bell"></i></a></li>
+                                <li><a href="#"><img src="assets/images/others/author.png" alt="Author Images"></a></li>
+                            </ul>*@
+                            <div class="header-search text-end d-flex align-items-center mainmenu-wrapper">
+                                <div class="mainmenu-nav ms-auto d-none d-xl-block ">
+                                    <ul class="metabar-block">
+                                        <partial name="_LoginPartial" />
+                                    </ul>
+                                </div>
+
+
+                            </div>
+                            <!-- Start Hamburger Menu  -->
+                            <div class="hamburger-menu d-block d-xl-none">
+                                <div class="hamburger-inner">
+                                    <div class="icon"><i class="fal fa-bars"></i></div>
+                                </div>
+                            </div>
+                            <!-- End Hamburger Menu  -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+       @*<!-- Start Header -->
         <header class="header axil-header  header-light header-sticky header-with-shadow">
             <div class="header-wrap">
                 <div class="row justify-content-between align-items-center">
@@ -99,7 +169,7 @@
 
                     </div>
                    
-
+*@
 
                             <!-- Start Hamburger Menu  -->
                             <div class="hamburger-menu d-block d-xl-none ">
@@ -120,8 +190,8 @@
                 <div class="mobile-menu-top">
                     <div class="logo">
                         <a href="index.html">
-                            <img class="dark-logo" src="~/assets/images/logo/logo-black.png" alt="Logo Images">
-                            <img class="light-logo" src="~/assets/images/logo/logo-white2.png" alt="Logo Images">
+                            <img class="dark-logo" src="~/img/t logo 200x200.png" alt="Logo Images">
+                      
                         </a>
                     </div>
                     <div class="mobile-close">
