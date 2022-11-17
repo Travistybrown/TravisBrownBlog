@@ -66,6 +66,8 @@ namespace TravisBrownBlog.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,BlogPostId,Body")] Comment comment, string? slug)
         {
+            ModelState.Remove("AuthorId");
+
             if (ModelState.IsValid)
             {
                 comment.AuthorId = _userManager.GetUserId(User);
@@ -76,7 +78,7 @@ namespace TravisBrownBlog.Controllers
 
                 _context.Add(comment);
                 await _context.SaveChangesAsync();
-                return RedirectToAction("Details", "BlogPost", new { slug });
+                return RedirectToAction("Details", "BlogPosts", new { slug });
             }
             ViewData["AuthorId"] = new SelectList(_context.Users, "Id", "Id", comment.AuthorId);
             ViewData["BlogPostId"] = new SelectList(_context.BlogPosts, "Id", "Content", comment.BlogPostId);
