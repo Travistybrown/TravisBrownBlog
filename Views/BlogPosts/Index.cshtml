@@ -7,8 +7,102 @@
 @{
     ViewData["Title"] = "Index";
 }
+<div class="row">
+    <div class="col-12 text-end mb-2 mt-3">
+        <a class="btn btn-primary rounded-pill" asp-action="create" asp-controller="BlogPosts" >Create New</a>
+    </div>
+</div>
 
-<h1>Index</h1>
+@foreach (BlogPost blogPost in Model)
+{
+    <!-- Start Post List  -->
+    <div class="content-block post-list-view mt--30">
+        <div class="post-thumbnail">
+            <a asp-controller="BlogPosts" asp-action="Details" asp-route-slug="@blogPost.Id">
+                <img src="@ImageService.ConvertByteArrayToFile(blogPost.ImageData!, blogPost.ImageType!, (int)DefaultImage.BlogPostImage)" alt="Post Images">
+            </a>
+        </div>
+        <div class="post-content">
+            <div class="post-cat">
+                <div class="post-cat-list">
+                    <a class="hover-flip-item-wrapper">
+                        <span class="hover-flip-item">
+                            <span data-text="@blogPost.Category!.Name">@blogPost.Category.Name</span>
+                        </span>
+                    </a>
+                </div>
+            </div>
+            <h4 class="title">
+                <a asp-controller="BlogPosts" asp-action="Details" asp-route-slug="@blogPost.Slug">
+                    @blogPost.Title
+                </a>
+            </h4>
+            <div class="post-meta-wrapper">
+                <div class="post-meta">
+                    <div class="content">
+                        <h6 class="post-author-name">
+                            <a class="hover-flip-item-wrapper" href="author.html">
+                                <span class="hover-flip-item">
+                                    <span data-text="@blogPost.Creator?.FirstName">@blogPost.Creator?.FullName</span>
+                                </span>
+                            </a>
+                        </h6>
+                        <ul class="post-meta-list">
+                            <li>@blogPost.DateCreated.ToString("MMM dd, yyyy")</li>
+                            <li>@blogPost.Comments.Count comments</li>
+                        </ul>
+                    </div>
+                   
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <a class="me-3 editIcons" asp-action="Edit" asp-route-id="@blogPost.Id">Edit</a>
+
+                    <a class="me-3 editIcons" asp-action="Delete" asp-route-id="@blogPost.Id">Delete</a>
+                </div>
+                @* <ul class="social-share-transparent justify-content-end">
+            <li><a href="#"><i class="fab fa-facebook-f"></i></a></li>
+            <li><a href="#"><i class="fab fa-instagram"></i></a></li>
+            <li><a href="#"><i class="fab fa-twitter"></i></a></li>
+            <li><a href="#"><i class="fas fa-link"></i></a></li>
+            </ul>*@
+            </div>
+        </div>
+    </div>
+    <!-- End Post List  -->
+}
+
+@*    <div class="col-12 col-md-8">
+        <div class="row row-cols-1 g-3">
+            @foreach (BlogPost blogPost in Model)
+            {
+                <div class="col">
+                    <div class="card mb-3">
+                        <div class="post-thumbnail">
+                         <a asp-controller="BlogPosts" asp-action="Details" asp-route-slug="@blogPost.Id">
+                            <img src="@ImageService.ConvertByteArrayToFile(blogPost.ImageData!, blogPost.ImageType!, (int)DefaultImage.BlogPostImage)" alt="Post Images">
+                        </a>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">@blogPost.Title</h5>
+                                    
+                                 
+                                    <div class="fs-4">
+                                        <a class="me-3 editIcons" asp-action="Edit" asp-route-id="@blogPost.Id">Edit</a>
+                                     
+                                        <a class="me-3 editIcons" asp-action="Delete" asp-route-id="@blogPost.Id">Delete</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+*@
+@*<h1>Index</h1>
 
 <p>
     <a asp-action="Create">Create New</a>
@@ -40,7 +134,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.IsPublished)
             </th>*@
-            <th>
+           @* <th>
                 @Html.DisplayNameFor(model => model.ImageData)
             </th>
             <th>
@@ -72,14 +166,14 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Abstract)
-            </td>
+            </td>*@
        @*     <td>
                 @Html.DisplayFor(modelItem => item.IsDeleted)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsPublished)
             </td>*@
-            <td>
+           @* <td>
                     <img class="img-fluid" src="@ImageService.ConvertByteArrayToFile(item.ImageData!,item.ImageType!,(int)DefaultImage.BlogPostImage)" style="width:80%; height:80%" />
             </td>
             <td>
@@ -101,3 +195,4 @@
 }
     </tbody>
 </table>
+*@
