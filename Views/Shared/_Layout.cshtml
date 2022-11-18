@@ -205,18 +205,7 @@
                    
 *@
 
-                            <!-- Start Hamburger Menu  -->
-                            <div class="hamburger-menu d-block d-xl-none ">
-                                <div class="hamburger-inner">
-                                    <div class="icon"><i class="fal fa-bars"></i></div>
-                                </div>
-                            </div>
-                            <!-- End Hamburger Menu  -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </header>
+                  
         <!-- Start Header -->
         <!-- Start Mobile Menu Area  -->
         <div class="popup-mobilemenu-area">
@@ -235,11 +224,62 @@
                     </div>
                 </div>
                 <ul class="mainmenu">
-                    <li><a asp-action="Index" asp-controller="Home">Home</a></li>
-                    <li><a asp-action="Index" asp-controller="BlogPosts">BlogPosts</a></li>
-                    <li><a asp-action="Index" asp-controller="Categories">Categories</a></li>
-                    <li><a asp-action="Index" asp-controller="Comments">Comments</a></li>
-                    <li><a asp-action="Index" asp-controller="Tags">Tags</a></li>
+                    <li class="menu-item-has-children">
+                        <a asp-controller="Home" asp-action="Index">Home</a>
+                    </li>
+                    @foreach (var category in await blogService.GetCategoriesAsync())
+                    {
+                        <li>
+                            <a asp-controller="Categories"
+                           asp-action="Details"
+                           asp-route-id="@category.Id">
+                                @category.Name
+                            </a>
+                        </li>
+                    }
+                    @if (User.IsInRole("Administrator"))
+                    {
+                        <li class="menu-item-has-children">
+                            <a> Author</a>
+                            <ul class="axil-submenu">
+                                <li>
+                                    <a class="hover-flip-item"
+                                   asp-controller="BlogPosts"
+                                   asp-action="Index">
+                                        <span class="hover-flip-item">
+                                            <span data-text="Manage Categories">Manage Blogs</span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="hover-flip-item-wrapper"
+                                   href="/swagger">
+                                        <span class="hover-flip-item">
+                                            <span data-text="API Docs">API DOCS</span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="hover-flip-item"
+                                   asp-controller="Categories"
+                                   asp-action="Index">
+                                        <span class="hover-flip-item">
+                                            <span data-text="Manage Categories">Manage Categories</span>
+                                        </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="hover-flip-item"
+                                   asp-controller="Tags"
+                                   asp-action="Index">
+                                        <span class="hover-flip-item">
+                                            <span data-text="Manage Categories">Manage Tags</span>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    }
                     <partial name="_LoginPartial" />
                 </ul>
 
@@ -252,12 +292,8 @@
             </main>
         </div>
 
-        @*<partial name="_LoginPartial" />*@
+        
       
-                        </div>
-                    </div>
-                </div>
-            </div>
             <!-- End Footer Top Area  -->
           
                              
