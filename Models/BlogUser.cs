@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace TravisBrownBlog.Models
 {
+    //Liskov substituion Principle the "L" in solid that states that every class or derived class should be sutible for there base or parents class. Meaning that
+    //I should be able to enterchange those classes and have my code run properly examples of this is my inheritence of the indentity user.
     public class BlogUser : IdentityUser 
     {
        

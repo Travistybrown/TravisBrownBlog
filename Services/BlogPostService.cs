@@ -8,8 +8,17 @@ using TravisBrownBlog.Services;
 
 namespace TravisBrownBlog.Services
 {
+	//This is utilzing the "s" single responibilty in SOLID a class should only have one reason to change. Ive utilized this in my blogservice layer where the BlogPostService
+	//only handels BlogPost Items
+
+	//Interface segregation the "I" in solid BlOgPOSTSERvice only implements the BLOGPOST interface. It says a class should have to implement a interface that it will never use
+	//keeping with the single responsibilty principal
+
+	//Dependy injection The "D" in solid which allows for a entity to be base upon abstractions instead on concressions you can see below where i injected the 
+	//ApplicationDbContext in the contructor below
     public class BlogPostService : IBlogPostService
     {
+		
 		private readonly ApplicationDbContext _context;
 
 		public BlogPostService(ApplicationDbContext context)
